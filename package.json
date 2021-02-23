@@ -1,7 +1,7 @@
 {
   "name": "MorocotoApp",
-  "version": "0.0.1",
-  "author": "Ionic Framework",
+  "version": "1.0",
+  "author": "Morocoto Team",
   "homepage": "https://ionicframework.com/",
   "scripts": {
     "ng": "ng",
@@ -50,5 +50,5 @@
     "tslint": "~6.1.0",
     "typescript": "~4.0.2"
   },
-  "description": "An Ionic project"
+  "description": "App para hacer transferencias"
 }
