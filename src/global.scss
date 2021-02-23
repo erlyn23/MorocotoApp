@@ -9,6 +9,28 @@
  * https://ionicframework.com/docs/layout/global-stylesheets
  */
 
+ .action-sheet-group{
+     --background: white;
+     .action-sheet-button{ color: black;}
+ }
+ .error-toast{
+     --background: red;
+     color: white;
+ }
+ .picker-wrapper{
+    --background: white;
+    color: black;
+    .picker-opt-selected{
+        color: black;
+    }
+    .picker-button{
+        color: black;
+    }
+ }
+ .error-message{
+     --background: red;
+     color: white;
+ }
 /* Core CSS required for Ionic components to work properly */
 @import "~@ionic/angular/css/core.css";
 

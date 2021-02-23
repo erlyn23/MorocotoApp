@@ -1,0 +1,245 @@
+<ion-header>
+  <ion-toolbar style="text-align: center;" color="secondary">
+    <ion-title>MorocotoApp</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content style="--background: #dbd3d3;">
+  <ion-grid>
+    <ion-row>
+      <ion-col size="12">
+        <ion-card color="primary">
+          <ion-card-header style="text-align: center;">
+            <ion-card-title style="font-weight: bold;">Registrarme</ion-card-title>
+            <ion-card-subtitle>Registro de información</ion-card-subtitle>
+            <ion-card-subtitle>Si ya posees una cuenta, <a style="text-decoration: underline; color: black;" [routerLink]="['/login']">inicia sesión</a></ion-card-subtitle>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-segment color="tertiary" [value]="segment" (ionChange)="segmentChange($event)">
+              <ion-segment-button [disabled]="segment!=='accountInfo'" value="accountInfo">
+                <ion-icon name="person-circle-outline" ></ion-icon>
+              </ion-segment-button>
+              <ion-segment-button [disabled]="segment!=='securityInfo'" value="securityInfo">
+                <ion-icon name="lock-closed-outline"></ion-icon>
+              </ion-segment-button>
+              <ion-segment-button [disabled]="segment!=='locationInfo'" value="locationInfo">
+                <ion-icon name="location-outline"></ion-icon>
+              </ion-segment-button>
+              <ion-segment-button [disabled]="segment!=='contactInfo'" value="contactInfo">
+                <ion-icon name="call-outline"></ion-icon>
+              </ion-segment-button>
+            </ion-segment>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="12">
+        <ion-card *ngIf="segment==='accountInfo'" color="primary">
+          <ion-card-header style="text-align: center;">
+            <ion-card-title style="font-weight: bold;">Cuenta</ion-card-title>
+            <ion-card-subtitle>Los campos con * son obligatorios</ion-card-subtitle>
+          </ion-card-header>
+          <ion-card-content>
+            <form [formGroup]="basicInfoForm">
+              <ion-item color="primary">
+                <ion-label position="floating"><ion-icon name="person-outline"></ion-icon> Nombre completo *</ion-label>
+                <ion-input type="text" formControlName="fullName"></ion-input>
+              </ion-item>
+              <div *ngIf="isValidField('fullName', basicInfoForm) === 'is-invalid'">
+                <p style="font-size: 12px; color: red;" *ngIf="basicInfoForm.get('fullName').errors?.required">Este campo es requerido</p>
+                <p style="font-size: 12px; color: red;" *ngIf="basicInfoForm.get('fullName').errors?.minlength">Escribe al menos 10 letras</p>
+                <p style="font-size: 12px; color: red;" *ngIf="basicInfoForm.get('fullName').errors?.maxlength">Escribe menos de 50 letras</p>
+              </div>
+              <ion-item color="primary">
+                <ion-label position="floating"><ion-icon name="card-outline"></ion-icon> Cédula (sin guiones) *</ion-label>
+                <ion-input type="text" formControlName="identificationDocument"></ion-input>
+              </ion-item>
+              <div *ngIf="isValidField('identificationDocument', basicInfoForm) === 'is-invalid'">
+                  <p style="font-size: 12px; color: red;" *ngIf="basicInfoForm.get('identificationDocument').errors?.required">Este campo es requerido</p>
+                  <p style="font-size: 12px; color: red;" *ngIf="basicInfoForm.get('identificationDocument').errors?.minlength">Solo escribe 11 números</p>
+                  <p style="font-size: 12px; color: red;" *ngIf="basicInfoForm.get('identificationDocument').errors?.maxlength">Solo escribe 11 números</p>
+                  <p style="font-size: 12px; color: red;" *ngIf="basicInfoForm.get('identificationDocument').errors?.pattern">Solo escribe números</p>
+              </div>
+              <ion-item color="primary">
+                <ion-label position="floating"><ion-icon name="mail-outline"></ion-icon> Correo electrónico *</ion-label>
+                <ion-input type="text" formControlName="email"></ion-input>
+              </ion-item>
+              <div *ngIf="isValidField('email', basicInfoForm) === 'is-invalid'">
+                <p style="font-size: 12px; color: red;" *ngIf="basicInfoForm.get('email').errors?.required">Este campo es requerido</p>
+                <p style="font-size: 12px; color: red;" *ngIf="basicInfoForm.get('email').errors?.maxlength">Escribe menos de 50 letras</p>
+                <p style="font-size: 12px; color: red;" *ngIf="basicInfoForm.get('email').errors?.pattern">Escribe un correo válido</p>
+              </div>
+              <ion-item color="primary">
+                <ion-label>Tipo de usuario *</ion-label>
+                <ion-select formControlName="userTypeId" interface="action-sheet">
+                  <ion-select-option value="1">Socio</ion-select-option>
+                  <ion-select-option value="2">Cliente</ion-select-option>
+                </ion-select>
+              </ion-item>
+              <div *ngIf="isValidField('userTypeId', basicInfoForm) === 'is-invalid'">
+                <p style="font-size: 12px; color: red;" *ngIf="basicInfoForm.get('userTypeId').errors?.required">Este campo es requerido</p>
+              </div>
+              <ion-item color="primary">
+                <ion-label position="floating"><ion-icon name="calendar-outline"></ion-icon> Fecha de nacimiento *</ion-label>
+                <ion-datetime formControlName="birthDate" displayFormat="DD MM YYYY" max="2003-12-31" color="primary"></ion-datetime>
+              </ion-item>
+              <div *ngIf="isValidField('birthDate', basicInfoForm) === 'is-invalid'">
+                <p style="font-size: 12px; color: red;" *ngIf="basicInfoForm.get('birthDate').errors?.required">Este campo es requerido</p>
+              </div>
+              <ion-item color="primary">
+                <ion-label position="floating"><ion-icon name="key-outline"></ion-icon> Contraseña *</ion-label>
+                <ion-input type="password" formControlName="password"></ion-input>
+              </ion-item>
+              <div *ngIf="isValidField('password', basicInfoForm) === 'is-invalid'">
+                <p style="font-size: 12px; color: red;" *ngIf="basicInfoForm.get('password').errors?.required">Este campo es requerido</p>
+                <p style="font-size: 12px; color: red;" *ngIf="basicInfoForm.get('password').errors?.minlength">Solo escribe al menos 4 números</p>
+                <p style="font-size: 12px; color: red;" *ngIf="basicInfoForm.get('password').errors?.maxlength">No escribas más de 8 números</p>
+                <p style="font-size: 12px; color: red;" *ngIf="basicInfoForm.get('password').errors?.pattern">Solo escribe números</p>
+              </div>
+              <ion-item color="primary">
+                <ion-label position="floating"><ion-icon name="key-outline"></ion-icon> Repite la contraseña *</ion-label>
+                <ion-input type="password" formControlName="confirmPassword"></ion-input>
+              </ion-item>
+              <div *ngIf="isValidField('confirmPassword', basicInfoForm) === 'is-invalid'">
+                <p style="font-size: 12px; color: red;" *ngIf="basicInfoForm.get('confirmPassword').errors?.required">Este campo es requerido</p>
+                <p style="font-size: 12px; color: red;" *ngIf="basicInfoForm.get('confirmPassword').errors?.minlength">Escribe al menos 4 números</p>
+                <p style="font-size: 12px; color: red;" *ngIf="basicInfoForm.get('confirmPassword').errors?.maxlength">No escribas más de 8 números</p>
+                <p style="font-size: 12px; color: red;" *ngIf="basicInfoForm.get('confirmPassword').errors?.pattern">Solo escribe números</p>
+              </div>
+              <ion-button (click)="setNextStep('lock')" fill="clear" expand="block" color="tertiary" [disabled]="basicInfoForm.invalid">
+                <ion-icon slot="start" name="arrow-forward-outline"></ion-icon> Siguiente
+              </ion-button>
+            </form>
+          </ion-card-content>
+        </ion-card>
+        <ion-card *ngIf="segment==='securityInfo'" color="primary">
+          <ion-card-header style="text-align: center;">
+            <ion-card-title style="font-weight: bold;">Seguridad</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <form [formGroup]="lockInfoForm">
+              <ion-item color="primary">
+                <ion-label>Pregunta de seguridad</ion-label>
+                <ion-select formControlName="securityQuestionId" interface="action-sheet">
+                  <ion-select-option value="1">Mejor amigo de la infancia</ion-select-option>
+                </ion-select>
+              </ion-item>
+              <div *ngIf="isValidField('securityQuestionId', lockInfoForm) === 'is-invalid'">
+                <p style="font-size: 12px; color: red;" *ngIf="lockInfoForm.get('securityQuestionId').errors?.required">Este campo es requerido</p>
+              </div>
+              <ion-item color="primary">
+                <ion-label position="floating"><ion-icon name="chatbox-outline"></ion-icon> Respuesta</ion-label>
+                <ion-input formControlName="securityAnswer" type="text"></ion-input>
+              </ion-item>
+              <div *ngIf="isValidField('securityAnswer', lockInfoForm) === 'is-invalid'">
+                <p style="font-size: 12px; color: red;" *ngIf="lockInfoForm.get('securityAnswer').errors?.required">Este campo es requerido</p>
+              </div>
+              <ion-item color="primary">
+                <ion-label position="floating"><ion-icon name="keypad-outline"></ion-icon> PIN de seguridad</ion-label>
+                <ion-input type="text" formControlName="pin"></ion-input>
+              </ion-item>
+              <div *ngIf="isValidField('pin', lockInfoForm) === 'is-invalid'">
+                <p style="font-size: 12px; color: red;" *ngIf="lockInfoForm.get('pin').errors?.required">Este campo es requerido</p>
+                <p style="font-size: 12px; color: red;" *ngIf="lockInfoForm.get('pin').errors?.minlength">Solo escribe 4 números</p>
+                <p style="font-size: 12px; color: red;" *ngIf="lockInfoForm.get('pin').errors?.maxlength">Solo escribe 4 números</p>
+                <p style="font-size: 12px; color: red;" *ngIf="lockInfoForm.get('pin').errors?.pattern">Solo escribe números</p>
+              </div>
+              <div style="display: flex; width: 100%; min-height: 1px; justify-content: center;">
+                <ion-button (click)="setNextStep('basic')" fill="clear" color="tertiary">
+                  <ion-icon slot="start" name="arrow-back-outline"></ion-icon> Atrás
+                </ion-button>
+                <ion-button (click)="setNextStep('location')" fill="clear" color="tertiary" [disabled]="lockInfoForm.invalid">
+                  <ion-icon slot="start" name="arrow-forward-outline"></ion-icon> Siguiente
+                </ion-button>
+              </div>
+            </form>
+          </ion-card-content>
+        </ion-card>
+        <ion-card *ngIf="segment==='locationInfo'" color="primary">
+          <ion-card-header style="text-align: center;">
+            <ion-card-title style="font-weight: bold;">Ubicación</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <form [formGroup]="locationInfoForm">
+              <ion-item color="primary">
+                <ion-label>País</ion-label>
+                <ion-select formControlName="country" interface="action-sheet">
+                  <ion-select-option value="República Dominicana">República Dominicana</ion-select-option>
+                </ion-select>
+              </ion-item>
+              <div *ngIf="isValidField('country', locationInfoForm) === 'is-invalid'">
+                <p style="font-size: 12px; color: red;" *ngIf="locationInfoForm.get('country').errors?.required">Este campo es requerido</p>
+              </div>
+              <ion-item color="primary">
+                <ion-label position="floating"><ion-icon name="compass-outline"></ion-icon> Provincia</ion-label>
+                <ion-input type="text" formControlName="province"></ion-input>
+              </ion-item>
+              <div *ngIf="isValidField('province', locationInfoForm) === 'is-invalid'">
+                <p style="font-size: 12px; color: red;" *ngIf="locationInfoForm.get('province').errors?.required">Este campo es requerido</p>
+              </div>
+              <ion-item color="primary">
+                <ion-label position="floating"><ion-icon name="pin-outline"></ion-icon> Ciudad</ion-label>
+                <ion-input type="text" formControlName="city"></ion-input>
+              </ion-item>
+              <div *ngIf="isValidField('city', locationInfoForm) === 'is-invalid'">
+                <p style="font-size: 12px; color: red;" *ngIf="locationInfoForm.get('city').errors?.required">Este campo es requerido</p>
+              </div>
+              <ion-item color="primary">
+                <ion-label position="floating"><ion-icon name="navigate-circle-outline"></ion-icon> Calle 1</ion-label>
+                <ion-input type="text" formControlName="street1"></ion-input>
+              </ion-item>
+              <div *ngIf="isValidField('street1', locationInfoForm) === 'is-invalid'">
+                <p style="font-size: 12px; color: red;" *ngIf="locationInfoForm.get('street1').errors?.required">Este campo es requerido</p>
+              </div>
+              <ion-item color="primary">
+                <ion-label position="floating"><ion-icon name="navigate-circle-outline"></ion-icon> Calle 2</ion-label>
+                <ion-input type="text" formControlName="street2"></ion-input>
+              </ion-item>
+              <div *ngIf="isValidField('street2', locationInfoForm) === 'is-invalid'">
+                <p style="font-size: 12px; color: red;" *ngIf="locationInfoForm.get('street2').errors?.required">Este campo es requerido</p>
+              </div>
+              
+              <div style="display: flex; width: 100%; min-height: 1px; justify-content: center;">
+                <ion-button (click)="setNextStep('lock')" fill="clear" color="tertiary">
+                  <ion-icon slot="start" name="arrow-back-outline"></ion-icon> Atrás
+                </ion-button>
+                <ion-button (click)="setNextStep('contact')" fill="clear" color="tertiary" [disabled]="locationInfoForm.invalid">
+                  <ion-icon slot="start" name="arrow-forward-outline"></ion-icon> Siguiente
+                </ion-button>
+              </div>
+            </form>
+          </ion-card-content>
+        </ion-card>
+        <ion-card *ngIf="segment==='contactInfo'" color="primary">
+          <ion-card-header style="text-align: center;">
+            <ion-card-title style="font-weight: bold;">Contacto</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <form [formGroup]="contactInfoForm">
+              <ion-item color="primary">
+                <ion-label position="floating"><ion-icon name="call-outline"></ion-icon> Teléfono</ion-label>
+                <ion-input type="text" formControlName="phoneNumber"></ion-input>
+              </ion-item>
+              <div *ngIf="isValidField('phoneNumber', contactInfoForm) === 'is-invalid'">
+                <p style="font-size: 12px; color: red;" *ngIf="contactInfoForm.get('phoneNumber').errors?.required">Este campo es requerido</p>
+                <p style="font-size: 12px; color: red;" *ngIf="contactInfoForm.get('phoneNumber').errors?.minlength">Solo escribe 10 números</p>
+                <p style="font-size: 12px; color: red;" *ngIf="contactInfoForm.get('phoneNumber').errors?.maxlength">Solo escribe 10 números</p>
+                <p style="font-size: 12px; color: red;" *ngIf="contactInfoForm.get('phoneNumber').errors?.pattern">Solo escribe números</p>
+              </div>
+
+              <div style="display: flex; width: 100%; min-height: 1px; margin-top: 20px; justify-content: center;">
+                <ion-button (click)="setNextStep('location')" fill="clear" color="tertiary">
+                  <ion-icon slot="start" name="arrow-back-outline"></ion-icon> Atrás
+                </ion-button>
+                <ion-button color="tertiary" [disabled]="contactInfoForm.invalid" (click)="registerUser()">
+                  Registrarme
+                </ion-button>
+              </div>
+            </form>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

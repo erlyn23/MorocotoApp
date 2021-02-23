@@ -3,14 +3,22 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
   {
-    path: 'home',
-    loadChildren: () => import('./home/home.module').then( m => m.HomePageModule)
+    path: 'login',
+    loadChildren: () => import('./authentication/login/login.module').then( m => m.LoginPageModule)
   },
   {
     path: '',
-    redirectTo: 'home',
+    redirectTo: 'login',
     pathMatch: 'full'
   },
+  {
+    path: 'register',
+    loadChildren: () => import('./authentication/register/register.module').then(m => m.RegisterPageModule)
+  },
+  {
+    path: 'email-verification',
+    loadChildren: () => import('./authentication/email-verification/email-verification.module').then( m => m.EmailVerificationPageModule)
+  }
 ];
 
 @NgModule({
