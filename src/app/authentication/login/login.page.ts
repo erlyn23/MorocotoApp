@@ -42,19 +42,20 @@ export class LoginPage implements OnInit {
     });
   }
 
-  async signIn(){
+  async signIn(): Promise<void>{
     const user: AuthRequest = {
       identificationDocument: this.loginForm.value.identificationDocument.toString(),
       userPassword: this.loginForm.value.userPassword,
       userPhone: (await Device.getInfo()).model,
       osPhone: (await Device.getInfo()).osVersion
     }
-    this._utilityService.presentLoading();
+    await this._utilityService.presentLoading();
     this._accountService.signIn(user).subscribe(result=>{
       if(result){
         this._utilityService.closeLoading();
         this._router.navigate(['/dashboard']);
+        this.loginForm.reset();
       }
-    });
+    }, error=>{ this._utilityService.closeLoading(); });
   }
 }

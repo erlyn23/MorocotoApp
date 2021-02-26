@@ -143,11 +143,12 @@ export class RegisterPage implements OnInit {
             this.navigationExtras.state.value = userRequest;
             this._router.navigate(['/email-verification'], this.navigationExtras);
           }
-        }, error=> { console.log(error) });
+        }, error=> { console.log(error); this._utilityService.closeLoading(); });
       }
       else
       {
         await this._utilityService.presentErrorToast('Las contraseñas no coinciden');
+        this._utilityService.closeLoading();
       }
     }
   }
@@ -161,6 +162,8 @@ export class RegisterPage implements OnInit {
   }
 
   ngOnDestroy(): void {
-    this.registerUserSubscription.unsubscribe();
+    if(this.registerUserSubscription !== undefined){
+      this.registerUserSubscription.unsubscribe();
+    }
   }
 }

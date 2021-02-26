@@ -60,7 +60,9 @@ export class EmailVerificationPage implements OnInit {
   }
 
   ngOnDestroy(): void {
-    this.sendVerificationEmailSubscription.unsubscribe();
-    this.activateAccountSubscription.unsubscribe();
+    if(this.activateAccountSubscription !== undefined && this.sendVerificationEmailSubscription !== undefined){
+      this.sendVerificationEmailSubscription.unsubscribe();
+      this.activateAccountSubscription.unsubscribe();
+    }
   }
 }

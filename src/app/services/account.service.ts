@@ -12,6 +12,7 @@ import { UtilityService } from './utility.service';
 import { AuthRequest } from '../core/commons/models/requests/auth-request';
 import { Plugins } from '@capacitor/core';
 import { Router } from '@angular/router';
+import { ChangePasswordRequest } from '../core/commons/models/requests/change-password-request.interface';
 
 const { Storage } = Plugins;
  
@@ -49,19 +50,32 @@ export class AccountService {
 
   registerUser(userRequest: UserRequest): Observable<number>{
     return this._http.post<number>(`${this.url}`, userRequest, httpOptions).pipe(retry(1), catchError((error)=>{
-      console.log(error);
-      this._utilityService.presentInfoAlert('Error al procesar solicitud',error.error.Message);
-      return throwError(error.message);
+      this._utilityService.presentInfoAlert('Error al procesar solicitud',error.error);
+      return throwError(error.error);
     }));
   }
 
   sendVerificationEmail(userEmail: string): Observable<EmailVerificationResponse>{
-    const model: SendEmailRequest = { userEmail: userEmail };
-    return this._http.post<EmailVerificationResponse>(`${this.url}/SendEmailVerification`, model, httpOptions);
+    const model: SendEmailRequest = { identificationDocument: '', userEmail: userEmail };
+    return this._http.post<EmailVerificationResponse>(`${this.url}/SendEmailVerificationWithEmail`, model, httpOptions).pipe(retry(1), catchError((error)=>{
+      this._utilityService.presentInfoAlert('Error al procesar solicitud',error.error);
+      return throwError(error.error);
+    }));
+  }
+
+  sendVerificationEmailWithIdentificationDocument(identificationDocument: string): Observable<EmailVerificationResponse>{
+    const model: SendEmailRequest = { identificationDocument: identificationDocument, userEmail: '' }
+    return this._http.post<EmailVerificationResponse>(`${this.url}/SendEmailVerificationWithIdentificationDocument`, model, httpOptions).pipe(retry(1), catchError((error)=>{
+      this._utilityService.presentInfoAlert('Error al procesar solicitud',error.error);
+      return throwError(error.error);
+    }));
   }
 
   activateAccount(activateAccountRequest: ActivateAccountRequest): Observable<ActivateAccountRequest>{
-    return this._http.patch<ActivateAccountRequest>(`${this.url}/VerifyAccount`, activateAccountRequest, httpOptions);
+    return this._http.patch<ActivateAccountRequest>(`${this.url}/VerifyAccount`, activateAccountRequest, httpOptions).pipe(retry(1), catchError((error)=>{
+      this._utilityService.presentInfoAlert('Error al procesar solicitud',error.error);
+      return throwError(error.error);
+    }));;
   }
 
   signIn(authRequest: AuthRequest): Observable<UserResponse>{
@@ -73,6 +87,10 @@ export class AccountService {
           this.userSubject.next(user);
         }
         return response;
+      }),
+      retry(1), catchError((error)=>{
+        this._utilityService.presentInfoAlert('Error al procesar solicitud',error.error);
+        return throwError(error.error);
       })
     );
   }
@@ -81,5 +99,14 @@ export class AccountService {
     Storage.remove({key: 'user'});
     this.userSubject.next(null);
     this._router.navigate(['/login']);
+  }
+
+  changePassword(changePasswordRequest: ChangePasswordRequest): Observable<ChangePasswordRequest>{
+    return this._http.patch<ChangePasswordRequest>(`${this.url}/ChangePassword`, changePasswordRequest, httpOptions)
+    .pipe(
+      retry(1), catchError((error)=>{
+        this._utilityService.presentInfoAlert('Error al procesar solicitud',error.error);
+        return throwError(error.error);
+      }));
   }
 }
