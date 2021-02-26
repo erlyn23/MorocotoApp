@@ -12,17 +12,17 @@
               <ion-title style="font-weight: bold;">Iniciar sesión</ion-title>
             </ion-card-header>
             <ion-card-content>
-              <form>
+              <form [formGroup]="loginForm">
                 <ion-item color="primary">
                   <ion-label position="floating"><ion-icon name="card-outline"></ion-icon> Cédula de identidad</ion-label>
-                  <ion-input type="number"></ion-input>
+                  <ion-input type="number" formControlName="identificationDocument"></ion-input>
                 </ion-item>
                 <ion-item color="primary">
                   <ion-label position="floating"><ion-icon name="key-outline"></ion-icon> Contraseña</ion-label>
-                  <ion-input type="password"></ion-input>
+                  <ion-input type="password" formControlName="userPassword"></ion-input>
                 </ion-item>
                 <div style="margin-top: 20px;">
-                  <ion-button expand="block" color="secondary">
+                  <ion-button expand="block" (click)="signIn()" color="tertiary">
                     Iniciar sesión
                   </ion-button>
                 </div>

@@ -1,4 +1,4 @@
-export interface UserRespones{
+export interface UserResponse{
     email: string;
     token: string;
 }

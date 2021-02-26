@@ -1,9 +1,39 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>email-verification</ion-title>
+  <ion-toolbar color="secondary" style="text-align: center;">
+    <ion-title>MorocotoApp</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-
+<ion-content style="--background: #dbd3d3;">
+  <div style="width: 100%; height: 100%; display: flex; justify-content: center; align-items: center;">
+    <ion-grid>
+      <ion-row>
+        <ion-col size="12">
+          <ion-card color="primary">
+            <ion-card-header style="text-align: center;">
+              <ion-card-title style="font-weight: bold;">Activar cuenta</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <form>
+                <ion-item color="primary">
+                  <ion-label position="floating"><ion-icon name="keypad-outline"></ion-icon> Código de verificación</ion-label>
+                  <ion-input type="number" [(ngModel)]="verificationCode" name="verificationCode"></ion-input>
+                </ion-item>
+                <div style="margin-top: 20px;">
+                  <ion-button (click)="activateAccount()" expand="block" color="tertiary">
+                    Verificar cuenta 
+                  </ion-button>
+                </div>
+                <ion-row>
+                  <ion-col size="12">
+                    <ion-label>¿No recibiste un código? <a (click)="sendEmailVerification()">Envíalo de nuevo</a></ion-label>
+                  </ion-col>
+                </ion-row>
+              </form>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
 </ion-content>

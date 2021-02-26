@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
+import { AuthGuard } from './core/commons/guards/auth.guard';
 
 const routes: Routes = [
   {
@@ -18,6 +19,15 @@ const routes: Routes = [
   {
     path: 'email-verification',
     loadChildren: () => import('./authentication/email-verification/email-verification.module').then( m => m.EmailVerificationPageModule)
+  },
+  {
+    path: 'dashboard',
+    canActivate: [AuthGuard],
+    loadChildren: () => import('./pages/dashboard/dashboard.module').then( m => m.DashboardPageModule)
+  },
+  {
+    path: 'change-password',
+    loadChildren: () => import('./authentication/change-password/change-password.module').then( m => m.ChangePasswordPageModule)
   }
 ];
 

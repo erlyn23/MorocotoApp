@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ToastController } from '@ionic/angular';
 import { Plugins } from '@capacitor/core';
 import { UserRequest } from 'src/app/core/commons/models/requests/user-request.interface';
 import { UserAddressRequest } from 'src/app/core/commons/models/requests/user-address-request.interface';
 import { UserPhoneNumbers } from 'src/app/core/commons/models/requests/user-phoneNumbers-request.interface';
 import { AccountService } from 'src/app/services/account.service';
 import { NavigationExtras, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { UtilityService } from 'src/app/services/utility.service';
 
 const { Device } = Plugins; 
 
@@ -25,10 +26,12 @@ export class RegisterPage implements OnInit {
   private emailPattern = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   private justNumbersPattern: string = "[0-9]*";
   private navigationExtras: NavigationExtras = {state: {userEmail: null}};
+
+  registerUserSubscription: Subscription;
   constructor(private _formBuilder: FormBuilder,
     private _accountService: AccountService,
     private _router: Router, 
-    private _toastCtrl: ToastController) { }
+    private _utilityService: UtilityService) { }
 
   ngOnInit() {
     this.initForms();
@@ -94,6 +97,7 @@ export class RegisterPage implements OnInit {
 
   async registerUser(): Promise<void>
   {
+    this._utilityService.presentLoading();
     if(this.basicInfoForm.valid && this.lockInfoForm.valid && this.locationInfoForm.valid && this.contactInfoForm.valid)
     {
       if(this.verifyPasswords(this.basicInfoForm.value.confirmPassword))
@@ -132,18 +136,18 @@ export class RegisterPage implements OnInit {
           userAddresses: [userAddressesRequest],
           userPhoneNumbers: [userPhoneNumbersRequest]
         };
-        this._accountService.registerUser(userRequest).subscribe(result=>{
+        this.registerUserSubscription = this._accountService.registerUser(userRequest).subscribe(result=>{
           if(result) 
           {
-            this.navigationExtras.state.value = userRequest.email;
+            this._utilityService.closeLoading();
+            this.navigationExtras.state.value = userRequest;
             this._router.navigate(['/email-verification'], this.navigationExtras);
           }
         }, error=> { console.log(error) });
       }
       else
       {
-        const toast = this._toastCtrl.create({duration: 3000, cssClass: 'error-message', message: 'Las contraseñas no coinciden'});
-        (await toast).present();
+        await this._utilityService.presentErrorToast('Las contraseñas no coinciden');
       }
     }
   }
@@ -157,6 +161,6 @@ export class RegisterPage implements OnInit {
   }
 
   ngOnDestroy(): void {
-
+    this.registerUserSubscription.unsubscribe();
   }
 }

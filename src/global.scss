@@ -31,6 +31,33 @@
      --background: red;
      color: white;
  }
+ .info-alert .alert-wrapper{
+     background: white;
+     color: black;
+
+     .alert-head{
+         text-align: center;
+         .alert-title{
+             color: black;
+             font-weight: bold;
+         }
+     }
+     .alert-message{
+         color: black;
+     }
+     .alert-button{
+         color: black;
+     }
+ }
+ .my-loading .loading-wrapper{
+     background: white;
+     .loading-content{
+         color: black;
+     }
+     .spinner-crescent{
+         color: black;
+     }
+ }
 /* Core CSS required for Ionic components to work properly */
 @import "~@ionic/angular/css/core.css";
 
