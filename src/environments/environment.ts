@@ -6,7 +6,8 @@ export const environment = {
   production: false,
   endpoints: 
   {
-    account: "https://localhost:44323/api/Account"
+    account: "https://localhost:5001/api/Account",
+    business:"https://localhost:5001/api/Business/GetAllBusiness/"
   }
 };
 

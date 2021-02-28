@@ -49,7 +49,7 @@ export class AccountService {
    }
 
   registerUser(userRequest: UserRequest): Observable<number>{
-    return this._http.post<number>(`${this.url}`, userRequest, httpOptions).pipe(retry(1), catchError((error)=>{
+    return this._http.post<number>(`${this.url}`, userRequest, httpOptions).pipe( catchError((error)=>{
       this._utilityService.presentInfoAlert('Error al procesar solicitud',error.error);
       return throwError(error.error);
     }));
