@@ -5,7 +5,7 @@ import { UserRequest } from '../core/commons/models/requests/user-request.interf
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { EmailVerificationResponse } from '../core/commons/models/responses/email-verification-response.interface';
 import { ActivateAccountRequest } from '../core/commons/models/requests/activate-account-request.interface';
-import { retry, catchError, map } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 import { SendEmailRequest } from '../core/commons/models/requests/send-email-request.interface';
 import { UserResponse } from '../core/commons/models/responses/user-response';
 import { UtilityService } from './utility.service';
@@ -49,7 +49,11 @@ export class AccountService {
    }
 
   registerUser(userRequest: UserRequest): Observable<number>{
+<<<<<<< HEAD
     return this._http.post<number>(`${this.url}`, userRequest, httpOptions).pipe( catchError((error)=>{
+=======
+    return this._http.post<number>(`${this.url}`, userRequest, httpOptions).pipe(catchError((error)=>{
+>>>>>>> Erlyn
       this._utilityService.presentInfoAlert('Error al procesar solicitud',error.error);
       return throwError(error.error);
     }));
@@ -57,7 +61,7 @@ export class AccountService {
 
   sendVerificationEmail(userEmail: string): Observable<EmailVerificationResponse>{
     const model: SendEmailRequest = { identificationDocument: '', userEmail: userEmail };
-    return this._http.post<EmailVerificationResponse>(`${this.url}/SendEmailVerificationWithEmail`, model, httpOptions).pipe(retry(1), catchError((error)=>{
+    return this._http.post<EmailVerificationResponse>(`${this.url}/SendEmailVerificationWithEmail`, model, httpOptions).pipe(catchError((error)=>{
       this._utilityService.presentInfoAlert('Error al procesar solicitud',error.error);
       return throwError(error.error);
     }));
@@ -65,14 +69,14 @@ export class AccountService {
 
   sendVerificationEmailWithIdentificationDocument(identificationDocument: string): Observable<EmailVerificationResponse>{
     const model: SendEmailRequest = { identificationDocument: identificationDocument, userEmail: '' }
-    return this._http.post<EmailVerificationResponse>(`${this.url}/SendEmailVerificationWithIdentificationDocument`, model, httpOptions).pipe(retry(1), catchError((error)=>{
+    return this._http.post<EmailVerificationResponse>(`${this.url}/SendEmailVerificationWithIdentificationDocument`, model, httpOptions).pipe(catchError((error)=>{
       this._utilityService.presentInfoAlert('Error al procesar solicitud',error.error);
       return throwError(error.error);
     }));
   }
 
   activateAccount(activateAccountRequest: ActivateAccountRequest): Observable<ActivateAccountRequest>{
-    return this._http.patch<ActivateAccountRequest>(`${this.url}/VerifyAccount`, activateAccountRequest, httpOptions).pipe(retry(1), catchError((error)=>{
+    return this._http.patch<ActivateAccountRequest>(`${this.url}/VerifyAccount`, activateAccountRequest, httpOptions).pipe(catchError((error)=>{
       this._utilityService.presentInfoAlert('Error al procesar solicitud',error.error);
       return throwError(error.error);
     }));;
@@ -87,8 +91,7 @@ export class AccountService {
           this.userSubject.next(user);
         }
         return response;
-      }),
-      retry(1), catchError((error)=>{
+      }),catchError((error)=>{
         this._utilityService.presentInfoAlert('Error al procesar solicitud',error.error);
         return throwError(error.error);
       })
@@ -103,8 +106,7 @@ export class AccountService {
 
   changePassword(changePasswordRequest: ChangePasswordRequest): Observable<ChangePasswordRequest>{
     return this._http.patch<ChangePasswordRequest>(`${this.url}/ChangePassword`, changePasswordRequest, httpOptions)
-    .pipe(
-      retry(1), catchError((error)=>{
+    .pipe(catchError((error)=>{
         this._utilityService.presentInfoAlert('Error al procesar solicitud',error.error);
         return throwError(error.error);
       }));
