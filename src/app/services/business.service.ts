@@ -1,5 +1,7 @@
-import { environment } from './../../environments/environment.prod';
-import { HttpHeaders } from '@angular/common/http';
+import { UtilityService } from './utility.service';
+import { Router } from '@angular/router';
+import { environment } from './../../environments/environment';
+import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 const httpOptions = {headers: new HttpHeaders({"content-type": "application/json"})}; 
@@ -8,7 +10,18 @@ const httpOptions = {headers: new HttpHeaders({"content-type": "application/json
 })
 export class BusinessService {
 
-  constructor() { }
+  constructor(private _router:Router,
+                private _utility:UtilityService,
+                private _httpClient:HttpClient) { }
 
-  //private url: string = environment.endpoints.business;
+    private url: string = environment.endpoints.business;
+
+    async GetAllBusiness(accountNumber:string){
+
+      //HERE WILL BE THE ACCOUNT NUMBER, I DON'T NOW HOW TO PUT IT IN YET
+      let response = await this._httpClient.get(this.url+""); 
+
+      return response;
+    }
+
 }

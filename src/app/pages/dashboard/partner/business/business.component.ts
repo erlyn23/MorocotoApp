@@ -1,4 +1,8 @@
+import { Business } from './../../../../core/commons/models/requests/business';
+import { BusinessService } from './../../../../services/business.service';
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-business',
@@ -7,8 +11,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class BusinessComponent implements OnInit {
 
-  constructor() { }
+  accounNumber:string;
+  businesses:Business[];
+  constructor(private _business:BusinessService,
+              private _router:Router) { }
 
-  ngOnInit() {}
+  ngOnInit() {
+
+    //this.businesses=this._business.GetAllBusiness(this.accounNumber);
+    
+  }
 
 }

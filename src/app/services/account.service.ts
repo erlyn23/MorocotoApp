@@ -49,11 +49,10 @@ export class AccountService {
    }
 
   registerUser(userRequest: UserRequest): Observable<number>{
-<<<<<<< HEAD
-    return this._http.post<number>(`${this.url}`, userRequest, httpOptions).pipe( catchError((error)=>{
-=======
+
+
     return this._http.post<number>(`${this.url}`, userRequest, httpOptions).pipe(catchError((error)=>{
->>>>>>> Erlyn
+
       this._utilityService.presentInfoAlert('Error al procesar solicitud',error.error);
       return throwError(error.error);
     }));
