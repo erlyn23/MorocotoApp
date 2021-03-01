@@ -1,3 +1,12 @@
-<p>
-  cards works!
-</p>
+<ion-container>
+  <ion-grid>
+    <ion-row *ngFor="let business of businesses">
+      <ion-col size="2"></ion-col>
+      <ion-col size="8" class="creditCard">
+        <h3 class="businessName">{business.Name}</h3>
+        <h3 class="creditAvailable">{business.CreditAvailable}</h3>
+      </ion-col>
+      <ion-col size="2"></ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-container>
