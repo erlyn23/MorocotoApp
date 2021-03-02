@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AccountService } from 'src/app/services/account.service';
+import { UtilityService } from 'src/app/services/utility.service';
+
 
 @Component({
   selector: 'app-dashboard',
@@ -8,10 +10,11 @@ import { AccountService } from 'src/app/services/account.service';
 })
 export class DashboardPage implements OnInit {
 
-  constructor(private _accountService: AccountService) { }
+  userType: string;
+  constructor(private _accountService: AccountService, 
+    private _utilityService: UtilityService) { }
 
-  ngOnInit() {
-    this._accountService.signOut();
+  async ngOnInit() {
+    this.userType = (await this._utilityService.getUserDecoded()).UserType;
   }
-
 }

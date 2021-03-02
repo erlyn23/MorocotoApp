@@ -136,6 +136,7 @@ export class RegisterPage implements OnInit {
           userAddresses: [userAddressesRequest],
           userPhoneNumbers: [userPhoneNumbersRequest]
         };
+        
         this.registerUserSubscription = this._accountService.registerUser(userRequest).subscribe(result=>{
           if(result) 
           {

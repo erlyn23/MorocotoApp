@@ -4,9 +4,9 @@ import { UtilityService } from './utility.service';
 import { environment } from 'src/environments/environment';
 import { Plugins } from '@capacitor/core';
 import { Observable } from 'rxjs';
+import { Router } from '@angular/router';
 
 const { Storage } = Plugins;
-
 @Injectable({
   providedIn: 'root'
 })
@@ -14,7 +14,8 @@ export class BusinessService {
 
   private url: string = environment.endpoints.business;
   httpOptions: any;
-  constructor(private _http: HttpClient, private _utilityService: UtilityService) { }
+  constructor(private _http: HttpClient, private _utilityService: UtilityService,
+    private _router: Router) { }
 
   async setHttpOptions(): Promise<any>{
     await Storage.get({key: 'user'}).then(object =>{
@@ -24,4 +25,13 @@ export class BusinessService {
         })};
     });
   }
+
+    async GetAllBusiness(accountNumber:string){
+
+      //HERE WILL BE THE ACCOUNT NUMBER, I DON'T NOW HOW TO PUT IT IN YET
+      let response = await this._http.get(this.url+""); 
+
+      return response;
+    }
+
 }

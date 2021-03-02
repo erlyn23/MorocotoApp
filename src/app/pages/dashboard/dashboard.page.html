@@ -1,9 +1,8 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>dashboard</ion-title>
-  </ion-toolbar>
-</ion-header>
+<app-header></app-header>
 
-<ion-content>
-
+<ion-content class="back-color" *ngIf="userType === '1'">
+  <app-partner></app-partner>
+</ion-content>
+<ion-content class="back-color" *ngIf="userType === '2'">
+  <!-- Aquí va el componente de cliente -->
 </ion-content>

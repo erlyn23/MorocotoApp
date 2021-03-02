@@ -1,5 +1,11 @@
 import { Injectable } from '@angular/core';
 import { AlertController, LoadingController, ToastController } from '@ionic/angular';
+import { Plugins } from '@capacitor/core';
+import jwt_decode  from 'jwt-decode';
+import { UserDecodedResponse } from '../core/commons/models/responses/user-decoded-response.interface';
+import { UserResponse } from '../core/commons/models/responses/user-response';
+
+const { Storage } = Plugins;
 
 @Injectable({
   providedIn: 'root'
@@ -44,5 +50,12 @@ export class UtilityService {
 
   closeLoading(){
     this._lodingCtrl.dismiss();
+  }
+
+  async getUserDecoded(): Promise<UserDecodedResponse>{
+    const userString: string = (await Storage.get({key: 'user'})).value;
+    const userObject: UserResponse = JSON.parse(userString);
+    const userDecoded: UserDecodedResponse = jwt_decode(userObject.token);
+    return userDecoded;
   }
 }
