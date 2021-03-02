@@ -58,17 +58,8 @@ export class AccountService {
     }));
   }
 
-  sendVerificationEmail(userEmail: string): Observable<EmailVerificationResponse>{
-    const model: SendEmailRequest = { identificationDocument: '', userEmail: userEmail };
-    return this._http.post<EmailVerificationResponse>(`${this.url}/SendEmailVerificationWithEmail`, model, httpOptions).pipe(catchError((error)=>{
-      this._utilityService.presentInfoAlert('Error al procesar solicitud',error.error);
-      return throwError(error.error);
-    }));
-  }
-
-  sendVerificationEmailWithIdentificationDocument(identificationDocument: string): Observable<EmailVerificationResponse>{
-    const model: SendEmailRequest = { identificationDocument: identificationDocument, userEmail: '' }
-    return this._http.post<EmailVerificationResponse>(`${this.url}/SendEmailVerificationWithIdentificationDocument`, model, httpOptions).pipe(catchError((error)=>{
+  sendVerificationEmail(sendEmailRequest: SendEmailRequest): Observable<EmailVerificationResponse>{
+    return this._http.post<EmailVerificationResponse>(`${this.url}/SendEmailVerification`, sendEmailRequest, httpOptions).pipe(catchError((error)=>{
       this._utilityService.presentInfoAlert('Error al procesar solicitud',error.error);
       return throwError(error.error);
     }));

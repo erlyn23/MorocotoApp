@@ -1,5 +1,8 @@
 <ion-header>
   <ion-toolbar color="secondary" style="text-align: center;">
+    <ion-button slot="start" fill="clear" (click)="goToLogin()">
+      <ion-icon slot="icon-only" name="arrow-back" style="color: black;"></ion-icon>
+    </ion-button>
     <ion-title>MorocotoApp</ion-title>
   </ion-toolbar>
 </ion-header>
@@ -14,18 +17,39 @@
               <ion-card-title style="font-weight: bold;">Activar cuenta</ion-card-title>
             </ion-card-header>
             <ion-card-content>
-              <form>
+              <form [formGroup]="sendEmailVerificationForm">
+                <ion-item color="primary" *ngIf="newUser === undefined">
+                  <ion-label position="floating"><ion-icon slot="start" name="card-outline"></ion-icon> Cédula (sin guiones)</ion-label>
+                  <ion-input formControlName="identificationDocument" type="text"></ion-input>
+                </ion-item>
+                <div *ngIf="isValidField('identificationDocument') === 'is-invalid'">
+                  <p style="font-size: 12px; color: red;" *ngIf="sendEmailVerificationForm.get('identificationDocument').errors?.required">Este campo es requerido</p>
+                  <p style="font-size: 12px; color: red;" *ngIf="sendEmailVerificationForm.get('identificationDocument').errors?.minlength">Solo escribe 11 números</p>
+                  <p style="font-size: 12px; color: red;" *ngIf="sendEmailVerificationForm.get('identificationDocument').errors?.maxlength">Solo escribe 11 números</p>
+                  <p style="font-size: 12px; color: red;" *ngIf="sendEmailVerificationForm.get('identificationDocument').errors?.pattern">Solo escribe números</p>
+                </div>
+                <div style="margin-top: 20px;" *ngIf="newUser === undefined">
+                  <ion-button (click)="sendEmailVerification()" expand="block" color="tertiary">
+                    Enviar código 
+                  </ion-button>
+                </div>
                 <ion-item color="primary">
                   <ion-label position="floating"><ion-icon name="keypad-outline"></ion-icon> Código de verificación</ion-label>
-                  <ion-input type="number" [(ngModel)]="verificationCode" name="verificationCode"></ion-input>
+                  <ion-input type="text" formControlName="verificationCode"></ion-input>
                 </ion-item>
+                <div *ngIf="isValidField('verificationCode') === 'is-invalid'">
+                  <p style="font-size: 12px; color: red;" *ngIf="sendEmailVerificationForm.get('verificationCode').errors?.required">Este campo es requerido</p>
+                  <p style="font-size: 12px; color: red;" *ngIf="sendEmailVerificationForm.get('verificationCode').errors?.minlength">Solo escribe 6 números</p>
+                  <p style="font-size: 12px; color: red;" *ngIf="sendEmailVerificationForm.get('verificationCode').errors?.maxlength">Solo escribe 6 números</p>
+                  <p style="font-size: 12px; color: red;" *ngIf="sendEmailVerificationForm.get('verificationCode').errors?.pattern">Solo escribe números</p>
+                </div>
                 <div style="margin-top: 20px;">
                   <ion-button (click)="activateAccount()" expand="block" color="tertiary">
                     Verificar cuenta 
                   </ion-button>
                 </div>
                 <ion-row>
-                  <ion-col size="12">
+                  <ion-col size="12" *ngIf="newUser !== undefined">
                     <ion-label>¿No recibiste un código? <a (click)="sendEmailVerification()">Envíalo de nuevo</a></ion-label>
                   </ion-col>
                 </ion-row>

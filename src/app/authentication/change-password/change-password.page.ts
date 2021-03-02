@@ -68,6 +68,10 @@ export class ChangePasswordPage implements OnInit {
     }
   }
 
+  goToLogin(): void{
+    this._router.navigate(['/login']);
+  }
+
   ngOnDestroy(): void {
     if(this.changePasswordSubscription !== undefined){
       this.changePasswordSubscription.unsubscribe();

@@ -97,7 +97,7 @@ export class RegisterPage implements OnInit {
 
   async registerUser(): Promise<void>
   {
-    this._utilityService.presentLoading();
+    await this._utilityService.presentLoading();
     if(this.basicInfoForm.valid && this.lockInfoForm.valid && this.locationInfoForm.valid && this.contactInfoForm.valid)
     {
       if(this.verifyPasswords(this.basicInfoForm.value.confirmPassword))
@@ -160,6 +160,10 @@ export class RegisterPage implements OnInit {
       return false;
     }
     return true;
+  }
+
+  goToLogin(): void{
+    this._router.navigate(['/login']);
   }
 
   ngOnDestroy(): void {
