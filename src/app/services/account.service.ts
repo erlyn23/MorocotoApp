@@ -69,7 +69,7 @@ export class AccountService {
     return this._http.patch<ActivateAccountRequest>(`${this.url}/VerifyAccount`, activateAccountRequest, httpOptions).pipe(catchError((error)=>{
       this._utilityService.presentInfoAlert('Error al procesar solicitud',error.error);
       return throwError(error.error);
-    }));;
+    }));
   }
 
   signIn(authRequest: AuthRequest): Observable<UserResponse>{

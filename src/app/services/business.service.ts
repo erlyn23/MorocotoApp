@@ -3,8 +3,11 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { UtilityService } from './utility.service';
 import { environment } from 'src/environments/environment';
 import { Plugins } from '@capacitor/core';
-import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
+import { UserResponse } from '../core/commons/models/responses/user-response';
+import { BusinessRequest } from '../core/commons/models/requests/business-request.interface';
+import { Observable, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
 const { Storage } = Plugins;
 @Injectable({
@@ -13,25 +16,33 @@ const { Storage } = Plugins;
 export class BusinessService {
 
   private url: string = environment.endpoints.business;
-  httpOptions: any;
+  httpOptions: HttpHeaders;
   constructor(private _http: HttpClient, private _utilityService: UtilityService,
     private _router: Router) { }
 
-  async setHttpOptions(): Promise<any>{
-    await Storage.get({key: 'user'}).then(object =>{
-      this.httpOptions = {headers: new HttpHeaders(
-        {"content-type": "application/json",
-        "Authorization": `Bearer ${JSON.parse(object.value).token}`
-        })};
-    });
+  async saveBusiness(business: BusinessRequest): Promise<Observable<BusinessRequest>>{
+    const httpOptions: HttpHeaders = await this.setHttpOptions();
+    return this._http.post<BusinessRequest>(this.url, business, {headers: httpOptions}).pipe(catchError(error=>{
+      this._utilityService.presentInfoAlert('Error al procesar la solicitud', error.error);
+      return throwError(error);
+    }));
   }
 
-    async GetAllBusiness(accountNumber:string){
+  async GetAllBusiness(accountNumber:string){
 
-      //HERE WILL BE THE ACCOUNT NUMBER, I DON'T NOW HOW TO PUT IT IN YET
-      let response = await this._http.get(this.url+""); 
+    //HERE WILL BE THE ACCOUNT NUMBER, I DON'T NOW HOW TO PUT IT IN YET
+    let response = await this._http.get(this.url+""); 
 
-      return response;
-    }
+    return response;
+  }
 
+  async setHttpOptions(): Promise<any>{
+    const userString: string = (await Storage.get({key: 'user'})).value;
+    const userObject: UserResponse = JSON.parse(userString);
+    const token: string = userObject.token;
+    return this.httpOptions = new HttpHeaders(
+      {"content-type": "application/json",
+      "Authorization": `Bearer ${token}`
+      });
+  }
 }

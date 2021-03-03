@@ -1,4 +1,4 @@
-import { Business } from './../../../../core/commons/models/requests/business';
+import { BusinessRequest } from '../../../../core/commons/models/requests/business-request.interface';
 import { BusinessService } from './../../../../services/business.service';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
@@ -12,7 +12,7 @@ import { Router } from '@angular/router';
 export class BusinessComponent implements OnInit {
 
   accounNumber:string;
-  businesses:Business[];
+  businesses:BusinessRequest[];
   constructor(private _business:BusinessService,
               private _router:Router) { }
 

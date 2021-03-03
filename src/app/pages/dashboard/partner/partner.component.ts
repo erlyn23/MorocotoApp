@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { ModalController } from '@ionic/angular';
+import { CreateBusinessComponent } from './create-business/create-business.component';
 
 @Component({
   selector: 'app-partner',
@@ -7,9 +9,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PartnerComponent implements OnInit {
 
-  constructor() { }
+  constructor(private _modalCtrl: ModalController) { }
 
   ngOnInit() {}
 
-  
+  async openCreateBusiness(): Promise<void>{
+    const createBusinessModal = this._modalCtrl.create({ component: CreateBusinessComponent });
+    (await createBusinessModal).present();
+  }
 }
