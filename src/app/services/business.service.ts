@@ -1,3 +1,5 @@
+import { BusinessResponse } from './../core/commons/models/responses/BusinessResponse';
+import { BusinessRequest } from './../core/commons/models/requests/business-request.interface';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { UtilityService } from './utility.service';
@@ -5,9 +7,8 @@ import { environment } from 'src/environments/environment';
 import { Plugins } from '@capacitor/core';
 import { Router } from '@angular/router';
 import { UserResponse } from '../core/commons/models/responses/user-response';
-import { BusinessRequest } from '../core/commons/models/requests/business-request.interface';
 import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 
 const { Storage } = Plugins;
 @Injectable({
@@ -17,6 +18,7 @@ export class BusinessService {
 
   private url: string = environment.endpoints.business;
   httpOptions: HttpHeaders;
+  
   constructor(private _http: HttpClient, private _utilityService: UtilityService,
     private _router: Router) { }
 
@@ -28,12 +30,16 @@ export class BusinessService {
     }));
   }
 
-  async GetAllBusiness(accountNumber:string){
+  async GetAllBusiness():Promise<Observable<BusinessResponse[]>>{
+    
+    const userDecoded = await this._utilityService.getUserDecoded();
+    const httpOptions = await this.setHttpOptions();
 
-    //HERE WILL BE THE ACCOUNT NUMBER, I DON'T NOW HOW TO PUT IT IN YET
-    let response = await this._http.get(this.url+""); 
-
-    return response;
+   
+     return this._http.get<BusinessResponse[]>(this.url+"/GetAllBusiness/"+userDecoded.Id, {headers:httpOptions}).pipe(catchError((error)=>{
+      this._utilityService.presentInfoAlert('Error al obtener sus negocios, intentelo mas tarde.',error.error);
+      return throwError(error.error);
+    })); 
   }
 
   async setHttpOptions(): Promise<any>{
