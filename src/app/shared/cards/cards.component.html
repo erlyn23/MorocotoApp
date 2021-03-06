@@ -1,9 +1,13 @@
 
-    <ion-row *ngFor="let business of businessList">
+    <ion-row *ngFor="let business of list" >
       <ion-col>
-        <div>
-          <h3>{{business.BusinessName}}</h3>
-          <h3>{{business.BusinessCreditAvailable}}</h3>        
-        </div>
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>{{business.businessName}}</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            {{business.businessCreditAvailable}}        
+          </ion-card-content>
+        </ion-card>
       </ion-col>
     </ion-row>

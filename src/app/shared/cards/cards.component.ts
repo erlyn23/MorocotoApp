@@ -1,16 +1,25 @@
+import { BusinessService } from 'src/app/services/business.service';
 import { BusinessResponse } from './../../core/commons/models/responses/BusinessResponse';
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-cards',
   templateUrl: './cards.component.html',
   styleUrls: ['./cards.component.scss'],
 })
-export class CardsComponent {
+export class CardsComponent implements OnInit{
 
-  @Input() businessList:BusinessResponse[];
   
-  constructor() { }
+  list:BusinessResponse[];
+  constructor(private _businessService:BusinessService) {
+    
+   }
+
+  ngOnInit()
+  {
+    this.list=this._businessService.getBusinesses();
+    
+  }
 
   
 

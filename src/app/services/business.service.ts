@@ -1,4 +1,4 @@
-import { BusinessResponse } from './../core/commons/models/responses/BusinessResponse';
+import { BusinessResponse } from 'src/app/core/commons/models/responses/BusinessResponse';
 import { BusinessRequest } from './../core/commons/models/requests/business-request.interface';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -18,10 +18,23 @@ export class BusinessService {
 
   private url: string = environment.endpoints.business;
   httpOptions: HttpHeaders;
+  businesses:BusinessResponse[]=[];
+
   
   constructor(private _http: HttpClient, private _utilityService: UtilityService,
     private _router: Router) { }
-
+    
+    setBusinesses(items:BusinessResponse[]){
+      items.forEach(item=>{
+        this.businesses.push(item);
+      })    
+      
+    }
+    getBusinesses(){
+      
+      this.businesses=[];
+      return this.businesses;
+    }
   async saveBusiness(business: BusinessRequest): Promise<Observable<BusinessRequest>>{
     const httpOptions: HttpHeaders = await this.setHttpOptions();
     return this._http.post<BusinessRequest>(this.url, business, {headers: httpOptions}).pipe(catchError(error=>{
@@ -35,7 +48,8 @@ export class BusinessService {
     const userDecoded = await this._utilityService.getUserDecoded();
     const httpOptions = await this.setHttpOptions();
 
-   
+    
+    
      return this._http.get<BusinessResponse[]>(this.url+"/GetAllBusiness/"+userDecoded.Id, {headers:httpOptions}).pipe(catchError((error)=>{
       this._utilityService.presentInfoAlert('Error al obtener sus negocios, intentelo mas tarde.',error.error);
       return throwError(error.error);

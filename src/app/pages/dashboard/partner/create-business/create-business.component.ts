@@ -1,3 +1,4 @@
+import { PartnerComponent } from './../partner.component';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
@@ -84,7 +85,13 @@ export class CreateBusinessComponent implements OnInit {
           {
             this._utilityService.closeLoading();
             this._utilityService.presentInfoAlert('Negocio guardado', 'Se ha creado tu negocio correctamente');
+            this._businessService.GetAllBusiness().then(subscription=>{
+                subscription.subscribe(result=>{
+                  this._businessService.setBusinesses(result);
+                })
+            });
             this.closeModal();
+
           }
         }, error=> { this._utilityService.closeLoading(); console.error(error) });
       });
