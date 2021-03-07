@@ -5,10 +5,10 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { UtilityService } from './utility.service';
 import { environment } from 'src/environments/environment';
 import { Plugins } from '@capacitor/core';
-import { Router } from '@angular/router';
 import { UserResponse } from '../core/commons/models/responses/user-response';
 import { Observable, throwError } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
+import { AccountService } from './account.service';
 
 const { Storage } = Plugins;
 @Injectable({
@@ -17,52 +17,32 @@ const { Storage } = Plugins;
 export class BusinessService {
 
   private url: string = environment.endpoints.business;
-  httpOptions: HttpHeaders;
-  businesses:BusinessResponse[]=[];
+  constructor(private _http: HttpClient, 
+    private _utilityService: UtilityService,
+    private _accountService: AccountService) { }
 
-  
-  constructor(private _http: HttpClient, private _utilityService: UtilityService,
-    private _router: Router) { }
-    
-    setBusinesses(items:BusinessResponse[]){
-      items.forEach(item=>{
-        this.businesses.push(item);
-      })    
-      
+    async saveBusiness(business: BusinessRequest): Promise<Observable<BusinessRequest>>{
+      const httpOptions: HttpHeaders =(await this._utilityService.setHttpOptions());
+      return this._http.post<BusinessRequest>(this.url, business, {headers: httpOptions}).pipe(catchError(error=>{
+        this._utilityService.presentInfoAlert('Error al obtener los negocios', error.error);
+        return throwError(error);
+      }));
     }
-    getBusinesses(){
+
+    async GetAllBusiness(): Promise<Observable<BusinessResponse[]>>{
       
-      this.businesses=[];
-      return this.businesses;
+      const userDecoded = (await this._utilityService.getDecodedUser());
+      const httpOptions = (await this._utilityService.setHttpOptions());
+      
+      return this._http.get<BusinessResponse[]>(this.url+"/GetAllBusiness/"+userDecoded.Id, {headers:httpOptions}).pipe(catchError((error)=>{
+        if(error.status === 401){
+          this._utilityService.presentInfoAlert('No autorizado', 
+          'El tiempo de sesión ha expirado, por favor vuelva a iniciar sesión',
+          ()=>{
+            this._accountService.signOut();
+          });
+        }
+        return throwError(error.error);
+      })); 
     }
-  async saveBusiness(business: BusinessRequest): Promise<Observable<BusinessRequest>>{
-    const httpOptions: HttpHeaders = await this.setHttpOptions();
-    return this._http.post<BusinessRequest>(this.url, business, {headers: httpOptions}).pipe(catchError(error=>{
-      this._utilityService.presentInfoAlert('Error al procesar la solicitud', error.error);
-      return throwError(error);
-    }));
-  }
-
-  async GetAllBusiness():Promise<Observable<BusinessResponse[]>>{
-    
-    const userDecoded = await this._utilityService.getUserDecoded();
-    const httpOptions = await this.setHttpOptions();
-
-    
-    
-     return this._http.get<BusinessResponse[]>(this.url+"/GetAllBusiness/"+userDecoded.Id, {headers:httpOptions}).pipe(catchError((error)=>{
-      this._utilityService.presentInfoAlert('Error al obtener sus negocios, intentelo mas tarde.',error.error);
-      return throwError(error.error);
-    })); 
-  }
-
-  async setHttpOptions(): Promise<any>{
-    const userString: string = (await Storage.get({key: 'user'})).value;
-    const userObject: UserResponse = JSON.parse(userString);
-    const token: string = userObject.token;
-    return this.httpOptions = new HttpHeaders(
-      {"content-type": "application/json",
-      "Authorization": `Bearer ${token}`
-      });
-  }
 }

@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { AccountService } from 'src/app/services/account.service';
+import { BusinessService } from 'src/app/services/business.service';
 import { UtilityService } from 'src/app/services/utility.service';
+import { VerificateAuthService } from 'src/app/services/verificate-auth.service';
 
 
 @Component({
@@ -11,10 +14,25 @@ import { UtilityService } from 'src/app/services/utility.service';
 export class DashboardPage implements OnInit {
 
   userType: string;
-  constructor(private _accountService: AccountService, 
+
+  hasAuthorizationSubscrition: Subscription;
+  authorizationInterval;
+  constructor(private _verificateAuthService: VerificateAuthService, 
     private _utilityService: UtilityService) { }
 
   async ngOnInit() {
-    this.userType = (await this._utilityService.getUserDecoded()).UserType;
+    this.authorizationInterval = setInterval( async ()=>{
+      this.hasAuthorizationSubscrition = (await this._verificateAuthService.getAuthorization()).subscribe(result=>{
+
+      }, error=>{ clearInterval(this.authorizationInterval); });
+    }, 3000);
+    this.userType = (await this._utilityService.getDecodedUser()).UserType;
+  }
+
+  ngOnDestroy(): void {
+    clearInterval(this.authorizationInterval);
+    if(this.hasAuthorizationSubscrition !== undefined){
+      this.hasAuthorizationSubscrition.unsubscribe();
+    }
   }
 }

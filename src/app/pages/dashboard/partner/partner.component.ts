@@ -4,6 +4,8 @@ import { Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 import { BusinessService } from 'src/app/services/business.service';
 import { CreateBusinessComponent } from './create-business/create-business.component';
+import { UtilityService } from 'src/app/services/utility.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-partner',
@@ -11,12 +13,17 @@ import { CreateBusinessComponent } from './create-business/create-business.compo
   styleUrls: ['./partner.component.scss'],
 })
 export class PartnerComponent implements OnInit {
+  
   businesses:BusinessResponse[];
-  constructor(private _modalCtrl: ModalController,private _business:BusinessService,
+
+  getAllBusinessesSubscrition: Subscription;
+  constructor(private _modalCtrl: ModalController,
+    private _business:BusinessService,
+    private _utilityService: UtilityService,
     private _router:Router) { }
 
   async ngOnInit() {
-    await this.BusinessList();
+    await this.BusinessList(false);
   }
   
   async openCreateBusiness(): Promise<void>{
@@ -24,13 +31,23 @@ export class PartnerComponent implements OnInit {
     (await createBusinessModal).present();
   }
   
-  async BusinessList(){
-    (await this._business.GetAllBusiness()).subscribe((data:BusinessResponse[])=>{
-      this.businesses=data;
-      this._business.setBusinesses(this.businesses); 
+  async BusinessList(wantToReset: boolean){
+    this.getAllBusinessesSubscrition = (await this._business.GetAllBusiness()).subscribe((data:BusinessResponse[])=>{
+      this.businesses = [];
+      if(wantToReset){
+        this.businesses = [];
+        this.businesses = data;
+      }else{
+        this.businesses = data;
+      }
     }, error=>{
-      console.log("Error",error
-      )
+      console.log("Error",error);
     });
+  }
+
+  ngOnDestroy(): void {
+    if(this.getAllBusinessesSubscrition !== undefined){
+      this.getAllBusinessesSubscrition.unsubscribe();
+    }
   }
 }

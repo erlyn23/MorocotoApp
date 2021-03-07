@@ -4,6 +4,7 @@ import { Plugins } from '@capacitor/core';
 import jwt_decode  from 'jwt-decode';
 import { UserDecodedResponse } from '../core/commons/models/responses/user-decoded-response.interface';
 import { UserResponse } from '../core/commons/models/responses/user-response';
+import { HttpHeaders } from '@angular/common/http';
 
 const { Storage } = Plugins;
 
@@ -16,15 +17,18 @@ export class UtilityService {
     private _toastCtrl: ToastController,
     private _lodingCtrl: LoadingController) { }
 
-  async presentInfoAlert(header: string, message: string)
+  async presentInfoAlert(header: string, message: string, callBack?: any)
   {
     const alertInfo = this._alertCtrl.create({
       header: header,
       message: message,
       cssClass: 'info-alert',
       buttons: [
-        { text: 'Aceptar' }
-      ]
+        { text: 'Aceptar',
+          handler: callBack
+        }
+      ],
+      backdropDismiss: false
     });
     (await alertInfo).present();
   }
@@ -52,9 +56,20 @@ export class UtilityService {
     this._lodingCtrl.dismiss();
   }
 
-  async getUserDecoded(): Promise<UserDecodedResponse>{
-    const userString: string = (await Storage.get({key: 'user'})).value;
-    const userObject: UserResponse = JSON.parse(userString);
+  httpOptions: HttpHeaders;
+  async setHttpOptions(): Promise<HttpHeaders>{
+    const savedUser = (await Storage.get({key: 'user'})).value;
+    const userObject: UserResponse = JSON.parse(savedUser);
+    const token = userObject.token;  
+    return this.httpOptions = new HttpHeaders(
+      {"content-type": "application/json",
+      "Authorization": `Bearer ${token}`
+      });
+  }
+  
+  async getDecodedUser(): Promise<UserDecodedResponse>{
+    const savedUser = await Storage.get({key: 'user'});
+    const userObject: UserResponse = JSON.parse(savedUser.value); 
     const userDecoded: UserDecodedResponse = jwt_decode(userObject.token);
     return userDecoded;
   }

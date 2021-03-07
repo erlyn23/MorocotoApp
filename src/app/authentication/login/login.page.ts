@@ -4,11 +4,10 @@ import { Router } from '@angular/router';
 import { AccountService } from 'src/app/services/account.service';
 import { UtilityService } from 'src/app/services/utility.service';
 import { Plugins } from '@capacitor/core';
-import { UserRequest } from 'src/app/core/commons/models/requests/user-request.interface';
 import { AuthRequest } from 'src/app/core/commons/models/requests/auth-request';
 
 const { Storage, Device } = Plugins;
-
+ 
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',

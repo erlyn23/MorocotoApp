@@ -1,7 +1,7 @@
 import { NgModule,CUSTOM_ELEMENTS_SCHEMA  } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { CardsComponent } from './cards/cards.component';
+import { CardsComponent } from '../core/commons/cards/cards.component';
 import { HeaderComponent } from '../core/commons/header/header.component';
 
 

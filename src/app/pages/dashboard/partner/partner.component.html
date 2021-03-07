@@ -1,11 +1,10 @@
 <ion-content class="back-color">
   <ion-grid>
-    <app-cards></app-cards>
+    <app-cards [businessList]="businesses"></app-cards>
   </ion-grid>
   <ion-fab vertical="bottom" horizontal="end" slot="fixed"> 
     <ion-fab-button color="tertiary" (click)="openCreateBusiness()">
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
   </ion-fab>
-    
 </ion-content>

@@ -1,4 +1,3 @@
-import { PartnerComponent } from './../partner.component';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
@@ -59,7 +58,7 @@ export class CreateBusinessComponent implements OnInit {
     await this._utilityService.presentLoading();
     if(this.basicInfoForm.valid && this.locationForm.valid && this.contactForm.valid)
     {
-      const partnerId: string = (await this._utilityService.getUserDecoded()).Id;
+      const partnerId: string = (await this._utilityService.getDecodedUser()).Id;
       const businessPhoneNumber: BusinessPhoneNumberRequest = { id: 0, businessId: 0, phoneNumber: this.contactForm.value.businessPhoneNumber };
       const businessAddress: BusinessAddressRequest = {
         id: 0,
@@ -79,22 +78,14 @@ export class CreateBusinessComponent implements OnInit {
         businessAddresses: [businessAddress],
         businessPhoneNumbers: [businessPhoneNumber]
       }
-      this._businessService.saveBusiness(businessRequest).then(value=>{
-          this.saveBusinessSubscription = value.subscribe(result=>{
+      this.saveBusinessSubscription = (await this._businessService.saveBusiness(businessRequest)).subscribe(result=>{
           if(result)
           {
             this._utilityService.closeLoading();
             this._utilityService.presentInfoAlert('Negocio guardado', 'Se ha creado tu negocio correctamente');
-            this._businessService.GetAllBusiness().then(subscription=>{
-                subscription.subscribe(result=>{
-                  this._businessService.setBusinesses(result);
-                })
-            });
             this.closeModal();
-
           }
         }, error=> { this._utilityService.closeLoading(); console.error(error) });
-      });
     }
   }
 
