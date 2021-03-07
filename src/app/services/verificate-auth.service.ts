@@ -16,7 +16,7 @@ export class VerificateAuthService {
     private _utilityService: UtilityService,
     private _accountService: AccountService) { }
 
-  async getAuthorization(): Promise<Observable<boolean>>{
+  async getAuthorizationForBusiness(): Promise<Observable<boolean>>{
     const httpOptions: HttpHeaders = (await this._utilityService.setHttpOptions());
     return this._http.get<boolean>(this.businessUrl, {headers: httpOptions}).pipe(catchError(error=>{
       if(error.status === 401){

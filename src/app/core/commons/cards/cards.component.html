@@ -1,11 +1,15 @@
-<ion-row *ngFor="let business of businessList" >
+<ion-row *ngFor="let business of businessList">
   <ion-col>
     <ion-card color="primary">
       <ion-card-header>
         <ion-card-title>{{business.businessName}}</ion-card-title>
       </ion-card-header>
       <ion-card-content>
-        {{business.businessCreditAvailable}}
+        RD$ {{business.businessCreditAvailable}}
+
+        <ion-button (click)="goToBusinessDetails(business)" expand="block" fill="clear" color="tertiary">
+          Ir al negocio
+        </ion-button>
       </ion-card-content>
     </ion-card>
   </ion-col>

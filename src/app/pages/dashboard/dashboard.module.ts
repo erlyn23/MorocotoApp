@@ -11,6 +11,7 @@ import { DashboardPageRoutingModule } from './dashboard-routing.module';
 import { DashboardPage } from './dashboard.page';
 import { SharedModule } from 'src/app/Shared/shared.module';
 import { CreateBusinessComponent } from './partner/create-business/create-business.component';
+import { BusinessDetailsComponent } from './partner/business-details/business-details.component';
 
 @NgModule({
   imports: [
@@ -21,6 +22,6 @@ import { CreateBusinessComponent } from './partner/create-business/create-busine
     DashboardPageRoutingModule,
     SharedModule
   ],
-  declarations: [DashboardPage,PartnerComponent,CustomerComponent, CreateBusinessComponent]
+  declarations: [DashboardPage,PartnerComponent,CustomerComponent, CreateBusinessComponent, BusinessDetailsComponent]
 })
 export class DashboardPageModule {}

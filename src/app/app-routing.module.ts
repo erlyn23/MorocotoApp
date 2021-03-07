@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './core/commons/guards/auth.guard';
+import { BusinessDetailsComponent } from './pages/dashboard/partner/business-details/business-details.component';
 
 const routes: Routes = [
   {
@@ -24,6 +25,11 @@ const routes: Routes = [
     path: 'dashboard',
     canActivate: [AuthGuard],
     loadChildren: () => import('./pages/dashboard/dashboard.module').then( m => m.DashboardPageModule)
+  },
+  {
+    path: 'business-details',
+    canActivate: [AuthGuard],
+    component: BusinessDetailsComponent
   },
   {
     path: 'change-password',
