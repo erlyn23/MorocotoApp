@@ -1,3 +1,4 @@
+import { SellCreditRequest } from './../core/commons/models/requests/sellCredit-request';
 import { BusinessResponse } from 'src/app/core/commons/models/responses/BusinessResponse';
 import { BusinessRequest } from './../core/commons/models/requests/business-request.interface';
 import { Injectable } from '@angular/core';
@@ -44,5 +45,21 @@ export class BusinessService {
         }
         return throwError(error.error);
       })); 
+    }
+
+    async sellCredit(request:SellCreditRequest):Promise<Observable<number>>{
+      //const userDecoded = this._utilityService.getDecodedUser();
+      const httpOptions = await this._utilityService.setHttpOptions();
+      
+      return this._http.post<number>(this.url+"/SellCredit",request,{headers:httpOptions}).pipe(catchError((error)=>{
+        if(error.status===401){
+          this._utilityService.presentInfoAlert('No autorizado','El tiempo de sesion ha expirado, por favor vuelva a iniciar sesion',
+          ()=>{
+            this._accountService.signOut();
+          });
+        }
+        return throwError(error.error);
+        
+      }));
     }
 }

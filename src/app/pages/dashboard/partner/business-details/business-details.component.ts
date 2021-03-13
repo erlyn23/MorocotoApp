@@ -1,8 +1,12 @@
+import { ModalController } from '@ionic/angular';
+import { FormGroup} from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { BusinessResponse } from 'src/app/core/commons/models/responses/BusinessResponse';
 import { VerificateAuthService } from 'src/app/services/verificate-auth.service';
+import { SellCreditComponent } from '../sell-credit/sell-credit.component';
+
 
 @Component({
   selector: 'app-business-details',
@@ -11,12 +15,15 @@ import { VerificateAuthService } from 'src/app/services/verificate-auth.service'
 })
 export class BusinessDetailsComponent implements OnInit {
 
+  
   hasAuthorizationSubscrition: Subscription;
+  sellCreditSubscription:Subscription;
   authorizationInterval;
-
   business: BusinessResponse;
+  form:FormGroup;
   constructor(private _verificateAuthService: VerificateAuthService, 
-  private _router: Router) { 
+              private _router: Router,
+              private _modalCtrl:ModalController) { 
     const navExtras = this._router.getCurrentNavigation();
     this.business = navExtras.extras.state?.value; 
   }
@@ -28,5 +35,25 @@ export class BusinessDetailsComponent implements OnInit {
       }, error=>{ clearInterval(this.authorizationInterval); });
     }, 3000);
   }
+
+
+
+
+
+  async SellCreditFormModal(){
+
+    const modal= await this._modalCtrl.create({
+      component:SellCreditComponent,
+      cssClass:'sell-credit',
+      componentProps:{
+        businessAccountNumber:this.business.businessNumber
+      }
+    })
+    return await modal.present();
+  }
+
+
+
+
 
 }

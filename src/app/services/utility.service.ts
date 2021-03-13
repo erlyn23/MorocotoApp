@@ -42,6 +42,13 @@ export class UtilityService {
     });
     (await errorToast).present();
   }
+async succesfull(){
+  const succesfullCheckmark= this._lodingCtrl.create({
+    cssClass:'success-checkmark',
+    message:'La transaccion se completo exitosamente.'
+  });
+  (await succesfullCheckmark).present();
+}
 
   async presentLoading()
   {
@@ -51,6 +58,7 @@ export class UtilityService {
     });
     (await loadingSpinner).present();
   }
+  
 
   closeLoading(){
     this._lodingCtrl.dismiss();

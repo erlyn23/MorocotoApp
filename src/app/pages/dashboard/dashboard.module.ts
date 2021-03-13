@@ -1,17 +1,21 @@
-import { CustomerComponent } from './customer/customer.component';
-import { PartnerComponent } from './partner/partner.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
 import { IonicModule } from '@ionic/angular';
 
-import { DashboardPageRoutingModule } from './dashboard-routing.module';
+import { FormsModule } from '@angular/forms';
+import {ReactiveFormsModule} from '@angular/forms';
 
-import { DashboardPage } from './dashboard.page';
 import { SharedModule } from 'src/app/Shared/shared.module';
+
+import { DashboardPageRoutingModule } from './dashboard-routing.module';
+import { DashboardPage } from './dashboard.page';
+
+
+import { CustomerComponent } from './customer/customer.component';
+import { PartnerComponent } from './partner/partner.component';
 import { CreateBusinessComponent } from './partner/create-business/create-business.component';
 import { BusinessDetailsComponent } from './partner/business-details/business-details.component';
+import { SellCreditComponent } from './partner/sell-credit/sell-credit.component';
 
 @NgModule({
   imports: [
@@ -20,8 +24,9 @@ import { BusinessDetailsComponent } from './partner/business-details/business-de
     ReactiveFormsModule,
     IonicModule,
     DashboardPageRoutingModule,
-    SharedModule
+    SharedModule,
+    
   ],
-  declarations: [DashboardPage,PartnerComponent,CustomerComponent, CreateBusinessComponent, BusinessDetailsComponent]
+  declarations: [DashboardPage,SellCreditComponent,PartnerComponent,CustomerComponent, CreateBusinessComponent, BusinessDetailsComponent]
 })
 export class DashboardPageModule {}

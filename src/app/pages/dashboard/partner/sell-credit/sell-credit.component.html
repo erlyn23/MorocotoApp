@@ -1,0 +1,54 @@
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="12">
+        <ion-card>
+          <ion-card-header style="text-align: center;">
+            <ion-card-title style="font-weight: bold;">Vender credito</ion-card-title>
+            <ion-card-subtitle>Todos los campos son obligatorios.</ion-card-subtitle>
+          </ion-card-header>
+          <ion-card-content>
+            <form [formGroup]="sellCreditForm">
+              <ion-item color="primary">
+                <ion-label position="floating"><ion-icon name="keypad-outline"></ion-icon> Numero de cuenta del comprador</ion-label>
+                <ion-input type="text" formControlName="customerAccountNumber"></ion-input>
+              </ion-item>
+              
+              <div *ngIf="isValidField('customerAccountNumber',sellCreditForm)=== 'is-invalid'">
+                <p style="font-size: 12px; color:red;" *ngIf="sellCreditForm.get('customerAccountNumber').errors?.required">Este campo es requerido.</p> 
+                <p style="font-size: 12px; color:red;" *ngIf="sellCreditForm.get('customerAccountNumber').errors?.minLength">Este campo debe poseer 10 digitos.</p> 
+                <p style="font-size: 12px; color:red;" *ngIf="sellCreditForm.get('customerAccountNumber').errors?.maxLength">Excedio la cantidad maxima de digitos.</p> 
+                <p style="font-size: 12px; color:red;" *ngIf="sellCreditForm.get('customerAccountNumber').errors?.pattern">Este campo solo debe contener digitos</p> 
+              </div>
+           
+              <ion-item color="primary">
+                <ion-label position="floating"><ion-icon name="keypad-outline"></ion-icon> Credito a vender</ion-label>
+                <ion-input type="text" formControlName="creditSelled"></ion-input>
+              </ion-item>
+             
+              <div *ngIf="isValidField('creditSelled',sellCreditForm)=== 'is-invalid'">
+                <p style="font-size: 12px; color:red;" *ngIf="sellCreditForm.get('creditSelled').errors?.required">Este campo es requerido.</p> 
+                <p style="font-size: 12px; color:red;" *ngIf="sellCreditForm.get('creditSelled').errors?.pattern">Este campo solo debe contener digitos</p> 
+              </div>
+
+              
+              <ion-item color="primary">
+                <ion-label position="floating"><ion-icon name="keypad-outline"></ion-icon> Ingrese su PIN</ion-label>
+                <ion-input type="text" formControlName="pin"></ion-input>
+              </ion-item>
+             
+              <div *ngIf="isValidField('pin',sellCreditForm)=== 'is-invalid'">
+                <p style="font-size: 12px; color:red;" *ngIf="sellCreditForm.get('pin').errors?.required">Este campo es requerido.</p> 
+                <p style="font-size: 12px; color:red;" *ngIf="sellCreditForm.get('pin').errors?.minLength">Este campo debe poseer 4 digitos.</p> 
+                <p style="font-size: 12px; color:red;" *ngIf="sellCreditForm.get('pin').errors?.maxLength">Este campo debe poseer 4 digitos.</p> 
+                <p style="font-size: 12px; color:red;" *ngIf="sellCreditForm.get('pin').errors?.pattern">Este campo solo debe contener digitos</p> 
+              </div>
+              
+              <ion-button color="tertiary" [disabled]="sellCreditForm.invalid" (click)="sellCredit()">Vender</ion-button>
+            </form>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

@@ -44,7 +44,7 @@ export class PartnerComponent implements OnInit {
       console.log("Error",error);
     });
   }
-
+  
   ngOnDestroy(): void {
     if(this.getAllBusinessesSubscrition !== undefined){
       this.getAllBusinessesSubscrition.unsubscribe();
