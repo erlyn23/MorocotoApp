@@ -1,4 +1,52 @@
-a{
-    color: black;
-    text-decoration: underline;
+.forgot-password{
+    color: var(--ion-color-tertiary);
+    text-decoration: none;
+    position: relative;
+    float: right;
+}
+
+.form-container{
+    width: 100%;
+    min-height: 1px;
+    padding: 0 20px;
+    margin-top: 100px;
+}
+
+.create-one{
+    font-family: 'MontserratBlack';
+    color: var(--ion-color-tertiary);
+    text-decoration: none;
+}
+
+.title-container{
+    text-align: center; 
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .app-title{
+        font-family: 'MontserratBlack';
+        font-size: 50px;
+        color: white;
+    }
+}
+
+.hello{
+    font-family: 'MontserratBlack';
+    font-size: 50px;
+    font-weight: bold;
+    margin-top: 20px;
+}
+
+.login-user-morocoto-label{
+    input{
+        width: 100%;
+    }
+}
+
+.login-password-morocoto-label{
+    input{
+        width: 100%;
+    }
 }

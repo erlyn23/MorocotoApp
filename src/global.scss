@@ -12,6 +12,68 @@
  * Extracted from: SweetAlert
  * Modified by: Istiak Tridip
  */
+
+@font-face {
+    font-family: 'MontserratBlack';
+    src: url('./assets/fonts/Montserrat-ExtraBold.ttf');
+ }
+
+@font-face {
+    font-family: 'Montserrat';
+    src: url('./assets/fonts/Montserrat-Regular.ttf');
+}
+
+*{
+font-family: 'Montserrat';
+}
+
+@mixin loginLabel($background) {
+    position: relative;
+    width: 100%;
+    &::before{
+        content: "";
+        position: absolute;
+        left: 10px;
+        top: 0;
+        bottom: 0;
+        width: 20px;
+        border-right-style: solid;
+        border-right-width: 1px;
+        border-right-color: gray;
+        background: $background  center / contain no-repeat;
+    }
+
+    input{
+        background-color: white;
+        font-family: 'Montserrat';
+        padding: 10px 40px;
+        border: solid var(--ion-color-tertiary) 1px;
+        border-radius: 20px;
+        color: var(--ion-color-tertiary);
+        outline: none;
+
+        &::placeholder{
+            color: var(--ion-color-tertiary);
+        }
+    }
+}
+
+.login-user-morocoto-label{
+    @include loginLabel(url("./assets/icon/MtoUserIcon.svg"));
+}
+.login-password-morocoto-label{
+    @include loginLabel(url("./assets/icon/MtoPasswordIcon.svg"));
+}
+
+.morocoto-button{
+    border-style: none;
+    font-family: 'Montserrat';
+    font-size: 20px;
+    border-radius: 120px;
+    padding: 15px;
+    background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(224,104,217,1) 0%, rgba(74,37,112,1) 100%);
+}
+
 .success-checkmark {
     width: 100%;
     height: 40%;

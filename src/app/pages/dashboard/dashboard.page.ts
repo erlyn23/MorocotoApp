@@ -23,7 +23,7 @@ export class DashboardPage implements OnInit {
   async ngOnInit() {
     this.authorizationInterval = setInterval( async ()=>{
       this.hasAuthorizationSubscrition = (await this._verificateAuthService.getAuthorizationForBusiness()).subscribe(result=>{
-
+        
       }, error=>{ clearInterval(this.authorizationInterval); });
     }, 3000);
     this.userType = (await this._utilityService.getDecodedUser()).UserType;

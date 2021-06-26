@@ -54,7 +54,8 @@ async succesfull(){
   {
     const loadingSpinner = this._lodingCtrl.create({
       cssClass: 'my-loading',
-      message: 'Procesando solicitud, por favor espere...'
+      message: 'Procesando solicitud, por favor espere...',
+      backdropDismiss: false
     });
     (await loadingSpinner).present();
   }
